@@ -1,3 +1,6 @@
 [submodule "C24S/2-OPI/path/to/child-repo"]
 	path = C24S/2-OPI/path/to/child-repo
 	url = https://github.com/inertmao/itmo.git
+[submodule "C24S/2-OPI/LAB-2"]
+	path = C24S/2-OPI/LAB-2
+	url = https://github.com/inertmao/Lab2Opi.git
