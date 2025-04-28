@@ -5,5 +5,4 @@
 <img alt="Я воин Дракона!" src="https://github.com/inertmao/itmo/blob/main/.docx/DKbd.gif">
 
 
-## tg : @inermao
-## github: @ismoilov18
+[![Telegram: @inertmao](.docx/telegram.svg)](https://t.me/inertmao)
