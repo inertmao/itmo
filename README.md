@@ -5,4 +5,6 @@
 <img alt="Я воин Дракона!" src="https://github.com/inertmao/itmo/blob/main/.docx/DKbd.gif">
 
 
-[![Telegram: @inertmao](.docx/telegram.svg)](https://t.me/inertmao)
+<a href="https://t.me/inertmao">
+  <img src="images/telegram.svg" alt="telegram: @inertmao" width="32" height="32">
+</a>
