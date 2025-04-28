@@ -1,0 +1,3 @@
+[submodule "C24S/2-OPI/path/to/child-repo"]
+	path = C24S/2-OPI/path/to/child-repo
+	url = https://github.com/inertmao/itmo.git
