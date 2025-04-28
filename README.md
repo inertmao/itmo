@@ -6,5 +6,5 @@
 
 
 <a href="https://t.me/inertmao">
-  <img src="images/telegram.svg" alt="telegram: @inertmao" width="32" height="32">
+  <img src=".docx/telegram.svg" alt="telegram: @inertmao" width="32" height="32">
 </a>
