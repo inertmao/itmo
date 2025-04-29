@@ -4,3 +4,6 @@
 [submodule "C24S/2-OPI/LAB-2"]
 	path = C24S/2-OPI/LAB-2
 	url = https://github.com/inertmao/Lab2Opi.git
+[submodule "C24S/2-OPI/Lab2Opi"]
+	path = C24S/2-OPI/Lab2Opi
+	url = https://github.com/inertmao/Lab2Opi.git
