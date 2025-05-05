@@ -314,10 +314,10 @@ def output_in_file(solution, function, iterations, quation):
     try:
         filename = input("Введите имя файла для сохранения данных: ")
 
-        file_path = os.path.join('./lb2/solutions', filename)
+        file_path = os.path.join('/home/inertmao/Desktop/itmo/itmo/C24S/2-compMath/Lab-2/solutions', filename)
 
-        if not os.path.exists('./lb2/solutions'):
-            os.makedirs('./lb2/solutions')
+        if not os.path.exists('/home/inertmao/Desktop/itmo/itmo/C24S/2-compMath/Lab-2/solutions'):
+            os.makedirs('/home/inertmao/Desktop/itmo/itmo/C24S/2-compMath/Lab-2/solutions')
 
         with open(file_path, 'w') as file:
             file.write("Уравнение: " + str(quation) + '\n')
