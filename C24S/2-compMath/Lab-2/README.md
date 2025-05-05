@@ -83,7 +83,7 @@ mv report.pdf ../Lab2\_Report.pdf
 Faiziev Faridun (inertmao)
 ИТМО, ФПМИ
 GitHub: [https://github.com/inertmao](https://github.com/inertmao)
-Email: ваш\_почтовый\_адрес@example.com
+Email: inertmao@gmail.com
 
 ---
 
