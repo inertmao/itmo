@@ -84,7 +84,9 @@ mv report.pdf ../Lab2\_Report.pdf
 
 ## 🙋‍ Автор и контакты
 
-Faiziev Faridun (inertmao)
+Ismoilov Shahzod (inertmao)
+ISU: 373296
+Group: P3207
 ИТМО, ФПМИ
 GitHub: [https://github.com/inertmao](https://github.com/inertmao)
 Email: inertmao@gmail.com
