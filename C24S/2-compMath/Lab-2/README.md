@@ -1,12 +1,4 @@
-**Evaluating the user's needs**
-
-The user seems to want to copy code or content in a more efficient way. Based on their message, they’re likely asking for a single block of code they can copy easily without extra formatting or backticks. Perhaps they need the README.md as plain text. To help them, I should consider providing the content as a clean, easily copyable snippet, possibly without the usual markdown formatting. I won’t need any tools for this; just a simple format should work!
-
-
-Thought for a few seconds
-
-
-# Лабораторная работа №2 по вычислительной математике
+#Лабораторная работа №2 по вычислительной математике
 
 **Тема:** Решение скалярных нелинейных уравнений и систем нелинейных уравнений
 
