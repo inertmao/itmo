@@ -1,0 +1,4 @@
+Quation: x^2 - 3x + 2
+Solution: 3.90625
+f(3.90625) = 5.5400390625
+iterations = 5
