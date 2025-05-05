@@ -3,15 +3,16 @@
 **Тема:** Решение скалярных нелинейных уравнений и систем нелинейных уравнений
 
 ---
-
 ## 📂 Структура репозитория
 
-    Lab-2/
-    ├── PyCode/               # Основные Python-скрипты
-    ├── graph/                # Сгенерированные графики
-    ├── report/               # Скомпилированный PDF-отчёт
-    │   └── TexReport/        # Исходники отчёта на LaTeX
-    └── solutions/            # Примеры работы и готовые решения
+<pre>
+Lab-2/
+├── <a href="https://github.com/inertmao/itmo/tree/main/C24S/2-compMath/Lab-2/PyCode">PyCode/</a>               Основные Python-скрипты
+├── <a href="https://github.com/inertmao/itmo/tree/main/C24S/2-compMath/Lab-2/graph">graph/</a>                Сгенерированные графики
+├── <a href="https://github.com/inertmao/itmo/tree/main/C24S/2-compMath/Lab-2/report">report/</a>              Скомпилированный PDF-отчёт
+│   └── <a href="https://github.com/inertmao/itmo/tree/main/C24S/2-compMath/Lab-2/report/TexReport">TexReport/</a>   Исходники отчёта на LaTeX
+└── <a href="https://github.com/inertmao/itmo/tree/main/C24S/2-compMath/Lab-2/solutions">solutions/</a>          Примеры работы и готовые решения
+</pre>
 
 
 ---
