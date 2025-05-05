@@ -58,13 +58,17 @@ Lab-2/
 * Lab2\_Report.pdf — готовый отчёт
 * TexReport/ — исходники LaTeX: report.tex, sections/, images/, Makefile или инструкции
 
-Сборка отчёта:
+### Сборка отчёта:
+
+<pre>
 cd report/TexReport
 pdflatex report.tex
 bibtex report
 pdflatex report.tex
 pdflatex report.tex
 mv report.pdf ../Lab2\_Report.pdf
+</pre>
+
 
 ### solutions/
 
