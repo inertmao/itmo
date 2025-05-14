@@ -61,7 +61,7 @@ def simple_iteration_method(system, method):
     plt.legend()  
     
     plt.tight_layout()
-    plt.show()
+    plt.savefig('graph1.png')
 
 def f1(x, y, system):
     if system == 1:
