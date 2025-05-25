@@ -1,0 +1,3 @@
+/home/inertmao/Desktop/itmo/itmo/C24S/algorithm/grph2/cmake-build-debug/CMakeFiles/grph2.dir
+/home/inertmao/Desktop/itmo/itmo/C24S/algorithm/grph2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/inertmao/Desktop/itmo/itmo/C24S/algorithm/grph2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
