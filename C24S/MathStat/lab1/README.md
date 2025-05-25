@@ -53,14 +53,14 @@ pip install pandas matplotlib seaborn statsmodels
 2. Скачайте скрипт по ссылке ниже.
 3. Запустите скрипт:
    ```bash
-   python lab1.py
+   python index.py
    ```
 
 ---
 
 ## Ссылка на код
 
-[Смотреть код программы на GitHub](https://github.com/ВАШ_ЛОГИН/ВАШ_РЕПОЗИТОРИЙ)  
+[Смотреть код программы на GitHub](https://github.com/inertmao/itmo/blob/main/C24S/MathStat/lab1/1zadananie%20/index.py)  
 _Замените ссылку на актуальную ссылку вашего репозитория с кодом_
 
 ---
@@ -113,17 +113,11 @@ virginica   30.9808  27.004918   31.475        29.716
 
 ---
 
-## GIF-анимация
-
-В конце лабораторной работы можно добавить gif-анимацию для наглядности.
-
-![gif-анимация](your_animation.gif)
-
 ---
 
 ## Как написать и запустить код
 
-1. Перейдите по [ссылке на репозиторий](https://github.com/inertmao/itmo/blob/main/C24S/MathStat/lab1/1zadananie%20/index.py).
+1. Перейдите по [ссылке на репозиторий](https://github.com/inertmao/itmo/tree/main/C24S/MathStat/lab1/1zadananie%20).
 2. Скачайте файл скрипта.
 3. Убедитесь, что в папке рядом с кодом находится файл `iris.csv`.
 4. Откройте терминал/командную строку, перейдите в папку с файлом и выполните:
