@@ -105,7 +105,7 @@ virginica   30.9808  27.004918   31.475        29.716
 
 Примеры графиков:
 
-![ecdf_all](ecdf_all.png)
+![ecdf_all](https://github.com/inertmao/itmo/blob/main/C24S/MathStat/lab1/1zadananie%20/boxplot_by_species.png)
 ![ecdf_by_species](ecdf_by_species.png)
 ![hist_all](hist_all.png)
 ![hist_by_species](hist_by_species.png)
