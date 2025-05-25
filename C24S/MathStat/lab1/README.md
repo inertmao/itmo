@@ -52,12 +52,12 @@ python lab1.py
 
 ## 📤 Пример вывода
 
-
 📌 Количество экземпляров каждого вида:
-setosa        50
-versicolor    50
-virginica     50
-🔼 Больше всего: setosa
+
+setosa 50
+versicolor 50
+virginica 50
+🔼 Больше всего: setosa  
 🔽 Меньше всего: setosa
 
 📊 Общая статистика по всем видам:
