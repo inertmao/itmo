@@ -3,113 +3,147 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# --- Загрузка данных ---
-data = pd.read_csv('kc_house_data.csv')
+# Загрузка данных
+df = pd.read_csv('kc_house_data.csv')
 
-# --- Изучение цены ---
-prices = data['price']
+# 1. Проверка распределения цены — логнормальное
+prices = df['price'].values
 
-print("Описание цены:")
-print(prices.describe())
+shape, loc, scale = stats.lognorm.fit(prices, floc=0)
 
-plt.hist(prices, bins=50, edgecolor='black')
-plt.title('Гистограмма распределения цены на недвижимость')
+def ks_test(data, cdf, args=()):
+    n = len(data)
+    data_sorted = np.sort(data)
+    cdf_vals = cdf(data_sorted, *args)
+    d_plus = np.max(np.arange(1, n+1)/n - cdf_vals)
+    d_minus = np.max(cdf_vals - (np.arange(0, n)/n))
+    D = max(d_plus, d_minus)
+    en = np.sqrt(n)
+    p_value = stats.kstwobign.sf(D * en)
+    return D, p_value
+
+cdf_lognorm = lambda x, s, loc, scale: stats.lognorm.cdf(x, s, loc, scale)
+
+D_ks, p_ks = ks_test(prices, cdf_lognorm, (shape, loc, scale))
+alpha = 0.05
+crit_val = 1.36 / np.sqrt(len(prices))
+
+observed_freq, bin_edges = np.histogram(prices, bins=20)
+expected_freq = []
+for i in range(len(bin_edges)-1):
+    expected_freq.append(
+        len(prices) * (stats.lognorm.cdf(bin_edges[i+1], shape, loc, scale) - stats.lognorm.cdf(bin_edges[i], shape, loc, scale))
+    )
+expected_freq = np.array(expected_freq)
+
+chi2_stat = ((observed_freq - expected_freq) ** 2 / expected_freq).sum()
+df_chi = len(observed_freq) - 1 - 3
+p_chi = 1 - stats.chi2.cdf(chi2_stat, df_chi)
+
+print(f"KS-test вручную: D = {D_ks:.4f}, p-value = {p_ks:.4e}")
+print(f"Критическое значение KS: {crit_val:.4f}")
+print(f"Chi2-test: chi2 = {chi2_stat:.2f}, p-value = {p_chi:.4e}")
+
+print("\n1. Проверка распределения цены:")
+if p_ks > alpha:
+    print(f"- KS-тест не отвергает гипотезу о логнормальном распределении (p={p_ks:.4e} > {alpha})")
+else:
+    print(f"- KS-тест отвергает гипотезу (p={p_ks:.4e} <= {alpha})")
+
+if p_chi > alpha:
+    print(f"- Chi2-тест не отвергает гипотезу о логнормальном распределении (p={p_chi:.4e} > {alpha})")
+else:
+    print(f"- Chi2-тест отвергает гипотезу (p={p_chi:.4e} <= {alpha})")
+
+# Построение гистограммы с наложением логнормального PDF
+plt.figure(figsize=(8,6))
+count, bins, ignored = plt.hist(prices, bins=20, density=True, alpha=0.6, color='g', label='Гистограмма цены')
+x = np.linspace(min(prices), max(prices), 1000)
+pdf = stats.lognorm.pdf(x, shape, loc, scale)
+plt.plot(x, pdf, 'r-', lw=2, label='Логнормальное распределение')
+plt.title('Гистограмма цены с логнормальным распределением')
 plt.xlabel('Цена')
-plt.ylabel('Частота')
-plt.show()
+plt.ylabel('Плотность вероятности')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('price_histogram.png')
+plt.close()
 
-# --- Тест 1: Колмогоров-Смирнов на нормальность цены (свой) ---
-def kolmogorov_smirnov_test(data_sample, cdf, args=()):
-    n = len(data_sample)
-    data_sorted = np.sort(data_sample)
-    cdf_values = cdf(data_sorted, *args)
-    
-    D_plus = np.max(np.arange(1, n+1)/n - cdf_values)
-    D_minus = np.max(cdf_values - np.arange(0, n)/n)
-    D = max(D_plus, D_minus)
-    
-    alpha = 0.05
-    D_critical = 1.36 / np.sqrt(n)
-    
-    p_value = stats.kstest(data_sample, cdf, args=args).pvalue
-    
-    return D, D_critical, p_value
+# 2. Проверяем равенство распределений цены старого и нового фонда
+df['old'] = df['yr_built'] <= (df['yr_built'].max() - 30)
+prices_old = df[df['old'] == True]['price'].values
+prices_new = df[df['old'] == False]['price'].values
 
-prices_standardized = (prices - prices.mean()) / prices.std()
+ks_stat, ks_pval = stats.ks_2samp(prices_old, prices_new)
+print(f"\n2. Проверка равенства распределений цены (KS тест scipy): D = {ks_stat:.4f}, p = {ks_pval:.4e}")
 
-D, D_critical, p_value = kolmogorov_smirnov_test(prices_standardized, stats.norm.cdf)
-print(f"\nКолмогоров-Смирнов (ручной): D = {D:.4f}, критическое = {D_critical:.4f}, p-value = {p_value:.4f}")
-print("H0: цена распределена нормально")
-print("Результат:", "Отвергаем H0" if D > D_critical else "Нет оснований отвергать H0")
+obs_old, bins = np.histogram(prices_old, bins=20)
+obs_new, _ = np.histogram(prices_new, bins=bins)
 
-# --- Тест 2: Колмогоров-Смирнов (готовый) ---
-ks_stat, ks_pvalue = stats.kstest(prices_standardized, 'norm')
-print(f"Колмогоров-Смирнов (scipy): D = {ks_stat:.4f}, p-value = {ks_pvalue:.4f}")
+total_sum = (obs_old.sum() + obs_new.sum()) / 2
+obs_old_norm = obs_old / obs_old.sum() * total_sum
+obs_new_norm = obs_new / obs_new.sum() * total_sum
 
-# --- Сравнение старого и нового фонда ---
+eps = 1e-10
+mask = (obs_new_norm > eps) & (obs_old_norm > eps)
 
-# Добавим столбец возраста дома (текущий год 2023)
-data['age'] = 2023 - data['yr_built']
+obs_old_filtered = obs_old_norm[mask]
+obs_new_filtered = obs_new_norm[mask]
 
-# Разделим на старый (>30 лет) и новый фонд
-old_fund = data[data['age'] > 30]['price']
-new_fund = data[data['age'] <= 30]['price']
+sum_old = obs_old_filtered.sum()
+sum_new = obs_new_filtered.sum()
+mean_sum = (sum_old + sum_new) / 2
 
-old_std = (old_fund - old_fund.mean()) / old_fund.std()
-new_std = (new_fund - new_fund.mean()) / new_fund.std()
+obs_old_filtered = obs_old_filtered / sum_old * mean_sum
+obs_new_filtered = obs_new_filtered / sum_new * mean_sum
 
-def ks_homogeneity_test(sample1, sample2):
-    n1, n2 = len(sample1), len(sample2)
-    data_all = np.sort(np.concatenate([sample1, sample2]))
-    
-    cdf1 = np.searchsorted(np.sort(sample1), data_all, side='right') / n1
-    cdf2 = np.searchsorted(np.sort(sample2), data_all, side='right') / n2
-    
-    D = np.max(np.abs(cdf1 - cdf2))
-    
-    n = n1 * n2 / (n1 + n2)
-    D_critical = 1.36 / np.sqrt(n)
-    
-    p_value = stats.ks_2samp(sample1, sample2).pvalue
-    
-    return D, D_critical, p_value
+chi2_2, pval_2 = stats.chisquare(f_obs=obs_old_filtered, f_exp=obs_new_filtered)
+print(f"Chi2-тест (нормированный и отфильтрованный): chi2 = {chi2_2:.2f}, p = {pval_2:.4e}")
 
-D, D_critical, p_value = ks_homogeneity_test(old_std, new_std)
-print(f"\nТест однородности Колмогоров-Смирнова (ручной): D = {D:.4f}, критическое = {D_critical:.4f}, p-value = {p_value:.4f}")
-print("H0: распределения цены одинаковы для старого и нового фонда")
-print("Результат:", "Отвергаем H0" if D > D_critical else "Нет оснований отвергать H0")
+if ks_pval > alpha:
+    print("- KS тест не отвергает гипотезу о равенстве распределений")
+else:
+    print("- KS тест отвергает гипотезу о равенстве распределений")
 
-res = stats.ks_2samp(old_std, new_std)
-print(f"Тест KS (scipy): D = {res.statistic:.4f}, p-value = {res.pvalue:.4f}")
+if pval_2 > alpha:
+    print("- Chi2 тест не отвергает гипотезу о равенстве распределений")
+else:
+    print("- Chi2 тест отвергает гипотезу о равенстве распределений")
 
-# --- Корреляция цены и жилой площади ---
+# 3. Корреляция площади и цены
+sqft = df['sqft_living'].values
 
-x = data['sqft_living']
-y = data['price']
+x = sqft
+y = prices
+n = len(x)
+mean_x = np.mean(x)
+mean_y = np.mean(y)
+cov_xy = np.sum((x - mean_x) * (y - mean_y)) / n
+std_x = np.std(x)
+std_y = np.std(y)
+r = cov_xy / (std_x * std_y)
 
-def pearson_correlation(x, y):
-    n = len(x)
-    mean_x, mean_y = np.mean(x), np.mean(y)
-    cov_xy = np.sum((x - mean_x) * (y - mean_y))
-    std_x = np.sqrt(np.sum((x - mean_x)**2))
-    std_y = np.sqrt(np.sum((y - mean_y)**2))
-    r = cov_xy / (std_x * std_y)
-    
-    t_stat = r * np.sqrt((n - 2) / (1 - r**2))
-    p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=n-2))
-    
-    return r, t_stat, p_value
+t_stat = r * np.sqrt((n - 2) / (1 - r**2))
+p_corr = 2 * (1 - stats.t.cdf(abs(t_stat), df=n-2))
+print(f"\n3. Корреляция Пирсона (вручную): r = {r:.4f}, t = {t_stat:.4f}, p = {p_corr:.4e}")
 
-r, t_stat, p_value = pearson_correlation(x, y)
-print(f"\nКоэффициент корреляции Пирсона (ручной): r = {r:.4f}, t = {t_stat:.4f}, p-value = {p_value:.4f}")
-print("H0: корреляция отсутствует")
-print("Результат:", "Отвергаем H0" if p_value < 0.05 else "Нет оснований отвергать H0")
+spearman_rho, spearman_p = stats.spearmanr(x, y)
+print(f"Корреляция Спирмена (scipy): rho = {spearman_rho:.4f}, p = {spearman_p:.4e}")
 
-r_scipy, p_scipy = stats.pearsonr(x, y)
-print(f"Коэффициент корреляции (scipy): r = {r_scipy:.4f}, p-value = {p_scipy:.4f}")
+if p_corr < alpha:
+    print("- Отвергаем H0, существует значимая корреляция между площадью и ценой")
+else:
+    print("- Не отвергаем H0, значимой корреляции нет")
 
-plt.scatter(x, y, alpha=0.3)
-plt.title('Зависимость цены от жилой площади')
-plt.xlabel('Жилая площадь (sqft_living)')
-plt.ylabel('Цена')
-plt.show()
+# Построение графика зависимости цены от площади
+plt.figure(figsize=(8,6))
+plt.scatter(sqft, prices, s=10, alpha=0.3)
+plt.title("Зависимость цены от жилой площади")
+plt.xlabel("Площадь жилой части (кв.футы)")
+plt.ylabel("Цена")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('price_vs_sqft.png')
+plt.close()
+
