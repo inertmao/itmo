@@ -1,5 +1,6 @@
 
 # Лабораторная работа по математической статистике (Лаборатория 4)
+<img alt="Я воин Дракона!" src="https://github.com/inertmao/itmo/blob/main/.docx/itmo7.gif">
 
 ## Описание проекта
 
