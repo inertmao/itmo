@@ -1,0 +1,66 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+struct LetterInfo {
+  char symbol;
+  int priority;
+  int frequency;
+};
+
+int main() {
+  string t;
+  cin >> t;
+
+  vector<LetterInfo> ll(26);
+  for (int i = 0; i < 26; ++i) {
+    int p;
+    cin >> p;
+    ll[i].symbol = 'a' + i;
+    ll[i].priority = p;
+    ll[i].frequency = 0;
+  }
+
+  for (size_t i = 0; i < t.size(); ++i) {
+    int idx = t[i] - 'a';
+    ll[idx].frequency = ll[idx].frequency + 1;
+  }
+
+  vector<LetterInfo> a;
+  for (int i = 0; i < 26; ++i) {
+    if (ll[i].frequency > 0) {
+      size_t pos = 0;
+      while (pos < a.size()) {
+        if (a[pos].priority <= ll[i].priority) {
+          break;
+        }
+        pos = pos + 1;
+      }
+      a.insert(a.begin() + pos, ll[i]);
+    }
+  }
+
+  string l = "";
+  string m = "";
+  string right = "";
+
+  for (size_t i = 0; i < a.size(); ++i) {
+    char c = a[i].symbol;
+    int count = a[i].frequency;
+
+    if (count == 1) {
+      m = m + c;
+    } else if (count >= 2) {
+      l = l + c;
+      right = c + right;
+      if (count > 2) {
+        m = m + string(count - 2, c);
+      }
+    }
+  }
+
+  cout << l << m << right << '\n';
+  return 0;
+}

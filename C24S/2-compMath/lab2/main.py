@@ -1,12 +1,9 @@
-# main.py
-
 import sys
 import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-# ======================= HELPERS =======================
 
 def to_float(s):
     try:
@@ -16,9 +13,6 @@ def to_float(s):
 
 
 def input_three():
-    """
-    Запрашивает у пользователя три числа: a, b и ε.
-    """
     try:
         a = to_float(input("a = "))
         b = to_float(input("b = "))
@@ -30,9 +24,6 @@ def input_three():
 
 
 def load_three(path):
-    """
-    Читает из файла путь path: три числа (в одну строку через пробел или по строкам).
-    """
     try:
         with open(path, encoding='utf-8') as f:
             lines = [ln.strip() for ln in f if ln.strip()]
@@ -208,7 +199,6 @@ def plot_sys(fun_sys, xr, yr, root=None, title="Система"):
     plt.show()
 
 
-# ======================= ОСНОВНОЙ КОД =======================
 
 def solve_single():
     # Три заранее заданных уравнения:
@@ -240,7 +230,6 @@ def solve_single():
         else:
             print("Неверный выбор. Попробуйте снова.")
 
-    # Ввод a, b, eps
     while True:
         print(" 1) Ввести a, b, ε с клавиатуры")
         print(" 2) Считать из файла")
