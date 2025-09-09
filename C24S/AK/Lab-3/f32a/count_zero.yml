@@ -1,0 +1,8 @@
+/* simulation_config
+isa: f32a
+loglevel: trace
+max_cycles: 20000
+input:
+  - addr: 0x80
+    value: 5
+*/
