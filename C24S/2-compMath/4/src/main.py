@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import traceback
 
 def lin_pow(tab):
     x, y = tab
@@ -33,13 +34,15 @@ def lin_log(tab):
 
 perms = 0
 
+import pdb
+
 def gauss(a, b):
-    global perms
     n = len(a)
     x = [0]*n
 
     for i in range(n-1):
-        swap(a, i, b)
+        if abs(a[i][i]) < 1e-12:
+            raise ZeroDivisionError("Метод Гаусса: нулевой диагональный элемент")
         for k in range(i+1, n):
             c = a[k][i] / a[i][i]
             a[k][i] = 0
@@ -51,8 +54,12 @@ def gauss(a, b):
         s = 0
         for j in range(i+1, n):
             s += a[i][j]*x[j]
+        if abs(a[i][i]) < 1e-12:
+            raise ZeroDivisionError("Метод Гаусса: деление на ноль")
         x[i] = (b[i]-s)/a[i][i]
     return x
+
+
 
 def swap(a, i, b):
     global perms
@@ -76,7 +83,6 @@ def min_sq(x, y, m):
 
     for i in range(m+1):
         sum_y.append(sum((xx**i)*yy for xx,yy in zip(x,y)))
-
     a = sym_mat(sum_x, m)
     b = sum_y
     return gauss(a, b)
@@ -138,6 +144,13 @@ def read_table(src=None):
         y = read_line(lines[1])
     if len(x)!=len(y):
         raise ValueError("Длины x и y не совпадают")
+
+    # 🔹 проверка на одинаковые значения
+    # if len(set(x)) == 1:
+    #     raise ValueError("Ошибка: все значения x одинаковые, аппроксимация невозможна")
+    # if len(set(y)) == 1:
+    #     print("⚠️ Предупреждение: все значения y одинаковые, аппроксимация выродится в константу")
+
     return [x,y]
 
 def read_line(s):
@@ -202,7 +215,9 @@ def main():
             c_p2 = min_sq(tab[0],tab[1],2)
             c_p3 = min_sq(tab[0],tab[1],3)
         except:
-            print("Ошибка НСК"); continue
+            print("Ошибка метода наименьших квадратов"); 
+            
+            continue
             
 
         c_exp = [math.exp(c_lin[0]), c_lin[1]]

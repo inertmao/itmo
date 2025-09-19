@@ -19,7 +19,7 @@ def print_table(x, y):
         print("| " + " | ".join(row) + " |")
 
 def print_divided(x, y):
-    tab = _divided_differences(x, y)
+    tab = div_diffs(x, y)
     n = len(x)
     print("Разделенные разности:")
     for i in range(n):
